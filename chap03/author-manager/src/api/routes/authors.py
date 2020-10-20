@@ -3,7 +3,6 @@ from flask import request
 from ..utils.responses import response_with
 from ..utils import responses as resp
 from ..models.authors import Author, AuthorSchema
-from ..utils.database import db
 
 author_routes = Blueprint('author_routes', __name__)
 
@@ -27,3 +26,11 @@ def get_author_list():
     author_schema = AuthorSchema(many=True, only=['first_name', 'last_name', 'id'])
     authors = author_schema.dump(fetched)
     return response_with(resp.SUCCESS_200, value={'authors': authors})
+
+
+@author_routes.route('/<int:author_id>', methods=['GET'])
+def get_author_detail(author_id):
+    fetched = Author.query.get_or_404(author_id)
+    author_schema = AuthorSchema()
+    author = author_schema.dump(fetched)
+    return response_with(resp.SUCCESS_200, value={'author': author})
