@@ -10,11 +10,17 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(120), nullable=False)
+    isVerified = db.Column(db.Boolean, nullable=False, default=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
 
     def create(self):
         db.session.add(self)
         db.session.commit()
         return self
+
+    @classmethod
+    def find_by_email(cls, email):
+        return cls.query.filter_by(email=email).first()
 
     @classmethod
     def find_by_username(cls, username):
@@ -36,3 +42,4 @@ class UserSchema(ModelSchema):
 
     id = fields.Integer(dump_only=True)
     username = fields.String(required=True)
+    email = fields.String(required=True)

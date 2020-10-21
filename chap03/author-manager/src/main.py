@@ -6,6 +6,7 @@ from flask_jwt_extended import JWTManager
 from api.utils.database import db
 from api.utils.responses import response_with
 import api.utils.responses as resp
+from api.utils.email import mail
 
 from api.routes.authors import author_routes
 from api.routes.books import book_routes
@@ -40,6 +41,7 @@ def create_app(config):
         return response_with(resp.SERVER_ERROR_404)
 
     jwt = JWTManager(app)
+    mail.init_app(app)
 
     db.init_app(app)
     with app.app_context():
@@ -54,7 +56,8 @@ def create_app(config):
 
 if __name__ == '__main__':
     import os
-    from api.config.config import ProductionConfig, TestingConfig, DevelopmentConfig
+    from api.config.config import ProductionConfig, TestingConfig, \
+        DevelopmentConfig
 
     if os.environ.get('WORK_ENV') == 'PROD':
         app_config = ProductionConfig
