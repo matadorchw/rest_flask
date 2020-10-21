@@ -11,6 +11,7 @@ class ProductionConfig(Config):
 class DevelopmentConfig(Config):
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:123456@localhost:3306/flaskrest'
+    SECRET_KEY = 'matador'
     SQLALCHEMY_ECHO = False
 
 
