@@ -22,6 +22,8 @@ class DevelopmentConfig(Config):
     MAIL_USERNAME = 'menglj@we-wins.com'
     MAIL_PASSWORD = 'Lte5563'
 
+    UPLOAD_FOLDER = 'images'
+
 
 class TestingConfig(Config):
     TESTING = True

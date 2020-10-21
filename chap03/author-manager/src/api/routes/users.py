@@ -68,7 +68,7 @@ def authenticate_user():
                                      current_user.username),
                                      'access_token': access_token})
         else:
-            return response_with(resp.UNAUTHORIZED_403)
+            return response_with(resp.UNAUTHORIZED_401)
     except Exception as e:
         print(e)
         return response_with(resp.INVALID_INPUT_422)

@@ -36,8 +36,8 @@ SERVER_ERROR_404 = {
     "message": "Resource not found"
 }
 
-UNAUTHORIZED_403 = {
-    "http_code": 403,
+UNAUTHORIZED_401 = {
+    "http_code": 401,
     "code": "notAuthorized",
     "message": "You are not authorised to execute this."
 }

@@ -1,6 +1,6 @@
 import logging
 import sys
-from flask import Flask
+from flask import Flask, send_from_directory
 from flask_jwt_extended import JWTManager
 
 from api.utils.database import db
@@ -20,6 +20,10 @@ def create_app(config):
     app.register_blueprint(author_routes, url_prefix='/api/authors')
     app.register_blueprint(book_routes, url_prefix='/api/books')
     app.register_blueprint(user_routes, url_prefix='/api/users')
+
+    @app.route('/avatar/<filename>')
+    def uploaded_file(filename):
+        return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
     @app.after_request
     def add_header(response):
