@@ -1,6 +1,6 @@
 import logging
 import sys
-from flask import Flask, send_from_directory
+from flask import Flask, send_from_directory, jsonify
 from flask_jwt_extended import JWTManager
 
 from api.utils.database import db
@@ -12,6 +12,9 @@ from api.routes.authors import author_routes
 from api.routes.books import book_routes
 from api.routes.users import user_routes
 
+from flask_swagger import swagger
+from flask_swagger_ui import get_swaggerui_blueprint
+
 
 def create_app(config):
     app = Flask(__name__)
@@ -20,6 +23,12 @@ def create_app(config):
     app.register_blueprint(author_routes, url_prefix='/api/authors')
     app.register_blueprint(book_routes, url_prefix='/api/books')
     app.register_blueprint(user_routes, url_prefix='/api/users')
+
+    SWAGGER_URL = '/api/docs'
+    swaggerui_blueprint = get_swaggerui_blueprint('/api/docs', '/api/spec',
+                                                  config={
+                                                      'app_name': "Flask Author DB"})
+    app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
 
     @app.route('/avatar/<filename>')
     def uploaded_file(filename):
@@ -43,6 +52,14 @@ def create_app(config):
     def not_found(e):
         logging.error(e)
         return response_with(resp.SERVER_ERROR_404)
+
+    @app.route('/api/spec')
+    def spec():
+        swag = swagger(app, prefix='/api')
+        swag['info']['base'] = "http://localhost:5000"
+        swag['info']['version'] = "1.0"
+        swag['info']['title'] = "Flask Author DB"
+        return jsonify(swag)
 
     jwt = JWTManager(app)
     mail.init_app(app)
